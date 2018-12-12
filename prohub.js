@@ -1,8 +1,8 @@
 /*
  * @Author: yang fangtao
  * @Date:   2018-12-03 11:10:40
- * @Last Modified by: yang fangtao
- * @Last Modified time: 2018-12-09 11:26:22
+ * @Last Modified by:   famensaodiseng
+ * @Last Modified time: 2018-12-12 14:15:06
  * 
  */
 
@@ -73,8 +73,8 @@ function getPage(e) {
 	var pageX = e.pageX || e.clientX + getScroll.scrollLeft;
 	var pageY = e.pageY || e.clientY + getScroll.scrollTop;
 	return {
-		pageX:pageX,
-		pageY:pageY
+		pageX: pageX,
+		pageY: pageY
 	}
 }
 //格式化日期对象，返回yyyy-MM-dd HH:mm:ss的形式
@@ -125,3 +125,44 @@ function getInterval(start, end) {
 		second: second
 	}
 }
+
+//动画函数、
+
+// var timerId = null;			此处不适合设置全局变量。
+// 封装动画的函数
+function animate(element, target) {
+	// 通过判断，保证页面上只有一个定时器在执行动画
+	if (element.timerId) {
+		clearInterval(element.timerId);
+		element.timerId = null;
+	}
+
+	element.timerId = setInterval(function () {
+		// 步进  每次移动的距离
+		var step = 10;
+		// 盒子当前的位置
+		var current = element.offsetLeft;
+		// 当从400 到 800  执行动画
+		// 当从800 到 400  不执行动画
+
+		// 判断如果当前位置 > 目标位置 此时的step  要小于0
+		if (current > target) {
+			step = -Math.abs(step);
+		}
+
+		// Math.abs(current - target)   <= Math.abs(step)
+		if (Math.abs(current - target) <= Math.abs(step)) {
+			// 让定时器停止
+			clearInterval(element.timerId);
+			// 让盒子到target的位置
+			element.style.left = target + 'px';
+			return;
+		}
+		// 移动盒子
+		current += step;
+		element.style.left = current + 'px';
+	}, 5);
+}
+
+
+
